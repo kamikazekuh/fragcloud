@@ -1,7 +1,7 @@
 from colors import Color,RED
 from entities.entity import Entity
 from events import Event
-from listeners import OnEntityDeleted
+from listeners import OnEntityDeleted, OnEntityCreated
 from messages import Shake, Fade
 from players.entity import Player
 from stringtables import string_tables
@@ -15,47 +15,50 @@ def on_entity_deleted(base_entity):
     if base_entity.classname in ['npc_grenade_frag','grenade_ar2']:
         create_particle(base_entity.origin, "fire_large_01",5.0)
         create_light(base_entity.origin,5.0)
+        
+
 
 @Event('player_death')
 def player_death(ev):
-    victim = Player.from_userid(ev['userid'])
-    attacker = Player.from_userid(ev['attacker'])
-    if ev['weapon'] == "combine_ball":
-        fade_message.send(attacker.index)
-        Shake(amplitude=5, duration=1, frequency=7).send(attacker.index)
-        ar2 = Entity.create('env_ar2explosion') 
-        ar2.material = "materials/orbsmoke1.vmt"
-        ar2.origin = victim.origin
-        ar2.spawn()
-        ar2.call_input("Explode")
-        ar2.call_input("Kill")
-    if ev['weapon'] == "smg1_grenade":
-        fade_message.send(attacker.index)
-        Shake(amplitude=5, duration=1, frequency=7).send(attacker.index)
-        ar2 = Entity.create('env_ar2explosion') 
-        ar2.material = "materials/orbsmoke5.vmt"
-        ar2.origin = victim.origin
-        ar2.spawn()
-        ar2.call_input("Explode")
-        ar2.call_input("Kill")
-    if ev['weapon'] == "grenade_frag":
-        fade_message.send(attacker.index)
-        Shake(amplitude=5, duration=1, frequency=7).send(attacker.index)
-        ar2 = Entity.create('env_ar2explosion') 
-        ar2.material = "materials/smokeball2.vmt"
-        ar2.origin = victim.origin
-        ar2.spawn()
-        ar2.call_input("Explode")
-        ar2.call_input("Kill")
-    if ev['weapon'] == "rpg_missile":
-        fade_message.send(attacker.index)
-        Shake(amplitude=5, duration=1, frequency=7).send(attacker.index)
-        ar2 = Entity.create('env_ar2explosion') 
-        ar2.material = "materials/smoke.vmt"
-        ar2.origin = victim.origin
-        ar2.spawn()
-        ar2.call_input("Explode")
-        ar2.call_input("Kill")
+    if ev['attacker'] != 0 and ev['userid'] != 0:
+        victim = Player.from_userid(ev['userid'])
+        attacker = Player.from_userid(ev['attacker'])
+        if ev['weapon'] == "combine_ball":
+            fade_message.send(attacker.index)
+            Shake(amplitude=5, duration=1, frequency=7).send(attacker.index)
+            ar2 = Entity.create('env_ar2explosion') 
+            ar2.material = "materials/orbsmoke1.vmt"
+            ar2.origin = victim.origin
+            ar2.spawn()
+            ar2.call_input("Explode")
+            ar2.call_input("Kill")
+        if ev['weapon'] == "smg1_grenade":
+            fade_message.send(attacker.index)
+            Shake(amplitude=5, duration=1, frequency=7).send(attacker.index)
+            ar2 = Entity.create('env_ar2explosion') 
+            ar2.material = "materials/orbsmoke5.vmt"
+            ar2.origin = victim.origin
+            ar2.spawn()
+            ar2.call_input("Explode")
+            ar2.call_input("Kill")
+        if ev['weapon'] == "grenade_frag":
+            fade_message.send(attacker.index)
+            Shake(amplitude=5, duration=1, frequency=7).send(attacker.index)
+            ar2 = Entity.create('env_ar2explosion') 
+            ar2.material = "materials/smokeball2.vmt"
+            ar2.origin = victim.origin
+            ar2.spawn()
+            ar2.call_input("Explode")
+            ar2.call_input("Kill")
+        if ev['weapon'] == "rpg_missile":
+            fade_message.send(attacker.index)
+            Shake(amplitude=5, duration=1, frequency=7).send(attacker.index)
+            ar2 = Entity.create('env_ar2explosion') 
+            ar2.material = "materials/smoke.vmt"
+            ar2.origin = victim.origin
+            ar2.spawn()
+            ar2.call_input("Explode")
+            ar2.call_input("Kill")
         
         
 def create_particle(position,particle_name,duration):
