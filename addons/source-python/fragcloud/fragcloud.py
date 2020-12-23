@@ -5,6 +5,28 @@ from listeners import OnEntityDeleted, OnEntityCreated
 from messages import Shake, Fade
 from players.entity import Player
 from stringtables import string_tables
+from stringtables.downloads import Downloadables
+
+
+downloads = Downloadables()
+
+combine_material = "x/killstreaks_v2/light5.vmt"
+smg1_grenade_material = "x/killstreaks_v2/orbsmoke1.vmt"
+frag_material = "x/killstreaks_v2/smokeball2.vmt"
+rpg_material = "x/killstreaks_v2/smoke.vmt"
+
+downloads.add('materials/' + combine_material)
+downloads.add('materials/' + combine_material.replace(".vmt",".vtf"))
+
+downloads.add('materials/' + smg1_grenade_material)
+downloads.add('materials/' + smg1_grenade_material.replace(".vmt",".vtf"))
+
+downloads.add('materials/' + frag_material)
+downloads.add('materials/' + frag_material.replace(".vmt",".vtf"))
+
+downloads.add('materials/' + rpg_material)
+downloads.add('materials/' + rpg_material.replace(".vmt",".vtf"))
+
 
 
 fade_color = Color(255, 11, 11)
@@ -15,8 +37,7 @@ def on_entity_deleted(base_entity):
     if base_entity.classname in ['npc_grenade_frag','grenade_ar2']:
         create_particle(base_entity.origin, "fire_large_01",5.0)
         create_light(base_entity.origin,5.0)
-        
-
+     
 
 @Event('player_death')
 def player_death(ev):
@@ -27,7 +48,7 @@ def player_death(ev):
             fade_message.send(attacker.index)
             Shake(amplitude=5, duration=1, frequency=7).send(attacker.index)
             ar2 = Entity.create('env_ar2explosion') 
-            ar2.material = "materials/orbsmoke1.vmt"
+            ar2.set_key_value_string("material",combine_material)
             ar2.origin = victim.origin
             ar2.spawn()
             ar2.call_input("Explode")
@@ -36,7 +57,7 @@ def player_death(ev):
             fade_message.send(attacker.index)
             Shake(amplitude=5, duration=1, frequency=7).send(attacker.index)
             ar2 = Entity.create('env_ar2explosion') 
-            ar2.material = "materials/orbsmoke5.vmt"
+            ar2.set_key_value_string("material",smg1_grenade_material)
             ar2.origin = victim.origin
             ar2.spawn()
             ar2.call_input("Explode")
@@ -45,7 +66,7 @@ def player_death(ev):
             fade_message.send(attacker.index)
             Shake(amplitude=5, duration=1, frequency=7).send(attacker.index)
             ar2 = Entity.create('env_ar2explosion') 
-            ar2.material = "materials/smokeball2.vmt"
+            ar2.set_key_value_string("material",frag_material)
             ar2.origin = victim.origin
             ar2.spawn()
             ar2.call_input("Explode")
@@ -54,7 +75,7 @@ def player_death(ev):
             fade_message.send(attacker.index)
             Shake(amplitude=5, duration=1, frequency=7).send(attacker.index)
             ar2 = Entity.create('env_ar2explosion') 
-            ar2.material = "materials/smoke.vmt"
+            ar2.set_key_value_string("material",rpg_material)
             ar2.origin = victim.origin
             ar2.spawn()
             ar2.call_input("Explode")
