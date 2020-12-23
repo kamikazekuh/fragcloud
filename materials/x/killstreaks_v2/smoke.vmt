@@ -1,0 +1,9 @@
+"UnlitGeneric"
+{
+	"$baseTexture" "x/killstreaks_v2/smoke"
+	"$translucent" "1"
+	"$selfillum" "1"
+	"$alpha" "0.4"
+	"$additive" "1"
+	"$decalscale" "0.15"
+}
